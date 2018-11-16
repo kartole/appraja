@@ -13,6 +13,16 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 
 public class ConnectionDB {
 
+    Connection connection;
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    public void setConnection(Connection connection) {
+        this.connection = connection;
+    }
+
     @SuppressLint("NewAPI")
     public Connection connectionDB(){
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -30,6 +40,7 @@ public class ConnectionDB {
         }catch (Exception e){
             Log.e("Exceção!", e.getMessage());
         }
+        setConnection(connection);
         return connection;
     }
 

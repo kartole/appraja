@@ -1,26 +1,11 @@
 package com.example.oshin.epraja;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewAnimationUtils;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -41,6 +26,7 @@ public class Login extends AppCompatActivity {
         public void run() {
             rellay1.setVisibility(View.VISIBLE);
             rellay2.setVisibility(View.VISIBLE);
+            rellay3.setVisibility(View.VISIBLE);
         }
 
     };
@@ -52,10 +38,16 @@ public class Login extends AppCompatActivity {
 
         rellay1 = (RelativeLayout)findViewById(R.id.rellay1);
         rellay2 = (RelativeLayout)findViewById(R.id.rellay2);
+        rellay3 = (RelativeLayout)findViewById(R.id.rellay3);
 
+        Bundle b = getIntent().getExtras();
 
-
-        handler.postDelayed(runnable, 2000);
+        if (b == null) {
+            handler.postDelayed(runnable, 2000);
+        }
+        else {
+            handler.postDelayed(runnable, 0);
+        }
 
         circularProgressButton = (CircularProgressButton)findViewById(R.id.btnLogin);
 
@@ -97,5 +89,13 @@ public class Login extends AppCompatActivity {
 
     }
 
+    public void registrar_OnClick(View v){
+        launchNextActivity = new Intent(Login.this, Register.class);
+        startActivity(launchNextActivity);
+    }
+
+    public void termsAndConditions_OnClick(View v){
+
+    }
 
 }

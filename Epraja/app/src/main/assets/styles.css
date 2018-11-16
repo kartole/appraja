@@ -1,0 +1,13 @@
+@charset "utf-8"
+
+div {
+text-align:justify;
+text-justify: inter-word;
+text-align-last:center;
+/* for IE9 */
+-ms-text-align-last:center;
+}
+
+p{
+    text-align: justify;
+}

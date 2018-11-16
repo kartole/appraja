@@ -85,27 +85,6 @@ public class Product extends Activity {
             Log.d("Sql Error", z);
         }
 
-
-
-
-//finaliza aqui
-        /*recyclerView = findViewById(R.id.rv);
-
-        productsList = new ArrayList<>();
-        productsList.add(new ModelProduct(R.drawable.tn_camiseta_tmb,"Camiseta Nike", "C&A Modas", "R$ 25,90", "4km"));
-        productsList.add(new ModelProduct(R.drawable.sample_1,"Cachorro 1", "C&A Modas", "R$ 25,90", "2,5km"));
-        productsList.add(new ModelProduct(R.drawable.sample_2,"Camiseta Nike", "C&A Modas", "R$ 25,90", "5,2km"));
-        productsList.add(new ModelProduct(R.drawable.sample_3,"Camiseta Nike", "C&A Modas", "R$ 25,90", "3,8km"));
-        productsList.add(new ModelProduct(R.drawable.sample_4,"Camiseta Nike", "C&A Modas", "R$ 25,90","0,2km"));
-
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        RecyclerView.LayoutManager rvLiLayoutManager = layoutManager;
-
-        recyclerView.setLayoutManager(rvLiLayoutManager);
-
-        ProductAdapter adapter = new ProductAdapter(this, productsList);
-        recyclerView.setAdapter(adapter);*/
     }
 
 }

@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtLogo"
-                android:visibility="visible">
+                android:visibility="gone">
 
 
                 <LinearLayout
@@ -64,6 +64,8 @@
 
                         <EditText
                             android:id="@+id/ed_username"
+                            android:hint="CPF ou Email"
+                            android:textColorHint="@color/colorWhite"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:layout_marginTop="5dp"
@@ -93,6 +95,8 @@
 
                         <EditText
                             android:layout_width="match_parent"
+                            android:hint="*******"
+                            android:textColorHint="@color/colorWhite"
                             android:layout_height="40dp"
                             android:layout_marginTop="5dp"
                             android:background="@drawable/et_bg"
@@ -129,6 +133,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_alignParentBottom="true"
+            android:visibility="invisible"
             >
 
             <Button
@@ -138,7 +143,8 @@
                 android:text="Registrar"
                 android:textAllCaps="false"
                 android:textColor="@color/colorWhite"
-                android:fontFamily="sans-serif"/>
+                android:fontFamily="sans-serif"
+                android:onClick="registrar_OnClick"/>
 
             <Button
                 android:layout_alignParentRight="true"
@@ -152,26 +158,5 @@
 
         </RelativeLayout>
 
-        <!-- <RelativeLayout
-             android:id="@+id/rellay3"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_centerInParent="true"
-             android:layout_marginRight="40dp"
-             android:layout_marginLeft="40dp"
-             android:visibility="gone"
-             >
-
-             <ImageView
-                 android:id="@+id/imgView_loading"
-                 android:layout_width="200dp"
-                 android:layout_height="200dp"
-                 android:adjustViewBounds="true"
-                 app:srcCompat="@drawable/loading"
-                 android:scaleType="fitCenter"
-                 android:layout_marginLeft="50dp"
-                 android:layout_marginRight="50dp"/>
-         </RelativeLayout>
-     -->
     </RelativeLayout>
 </layout>
