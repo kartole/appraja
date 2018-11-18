@@ -1,14 +1,25 @@
 package com.example.oshin.epraja;
 
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.app.Activity;
 
 import java.util.ArrayList;
 
@@ -35,11 +46,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int position) {
 
-        ModelProduct productItem = mList.get(position);
-        ImageView image = viewHolder.item_image;
-        TextView name, place, price, distancia;
+
+
+        final ModelProduct productItem = mList.get(position);
+        final ImageView image = viewHolder.item_image;
+        final TextView name, place, price, distancia;
+
 
         name = viewHolder.item_name;
         place = viewHolder.item_place;
@@ -52,6 +66,25 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         place.setText(productItem.getPlace());
         price.setText(productItem.getPrice());
         distancia.setText(productItem.getDistancia());
+
+        viewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+                Intent intent = new Intent(mContext, rv_product_items_detailed.class);
+                intent.putExtra("item_image", productItem.getImage());
+                intent.putExtra("item_name", productItem.getName());
+                intent.putExtra("item_place", productItem.getPlace());
+                intent.putExtra("item_price", productItem.getPrice());
+                intent.putExtra("item_dist", productItem.getDistancia());
+                mContext.startActivity(intent);
+            }
+        });
+
+
+
     }
 
     @Override
@@ -61,6 +94,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
+        LinearLayout parentLayout;
         ImageView item_image;
         TextView item_name, item_place, item_price, item_endereco, item_distancia;
         public ViewHolder(View itemView){
@@ -71,6 +105,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             item_place = itemView.findViewById(R.id.item_place);
             item_price = itemView.findViewById(R.id.item_price);
             item_distancia = itemView.findViewById(R.id.item_distancia);
+
+            parentLayout = itemView.findViewById(R.id.parentLayout);
         }
     }
+
+
 }

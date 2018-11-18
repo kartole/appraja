@@ -1,12 +1,22 @@
 package com.example.oshin.epraja;
 
+import android.app.ActivityOptions;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.Pair;
+import android.view.Display;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -16,46 +26,46 @@ import java.util.ArrayList;
 public class Product extends Activity {
 
     RecyclerView recyclerView;
-
     ArrayList<ModelProduct> productsList;
-//aqui
+
+
+    //aqui
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teste);
 
+
         String z = null;
         try {
             ConnectionDB connect = new ConnectionDB();
             Connection con = connect.connectionDB();
-            if (con == null){
+            if (con == null) {
                 z = "Cheque a conexão!";
-            }
-            else {
+            } else {
                 String query = "select A.IMG_NOME, A.NOME, B.NOME_LOJA AS LOJA, A.PRECO, '4,5KM' AS DISTANCIA FROM TB_T_PRODUTO A INNER JOIN TB_T_LOJA B ON A.ID_LOJA = B.ID_LOJA";
                 Statement statement = con.createStatement();
                 ResultSet rs = statement.executeQuery(query);
-                if (rs.next()){
+                if (rs.next()) {
                     recyclerView = findViewById(R.id.rv);
 
                     productsList = new ArrayList<>();
                     int out = 0;
                     int drawableID;
 
-                    while (out < 1){
+                    while (out < 1) {
                         drawableID = getResources().getIdentifier(rs.getString("IMG_NOME"), "drawable", getPackageName());
 
                         productsList.add(new ModelProduct(drawableID,
-                                            rs.getString("NOME"),
-                                            rs.getString("LOJA"),
-                                            rs.getString("PRECO"),
-                                            rs.getString("DISTANCIA"))
+                                rs.getString("NOME"),
+                                rs.getString("LOJA"),
+                                rs.getString("PRECO"),
+                                rs.getString("DISTANCIA"))
                         );
 
-                        if (rs.isLast() == true){
+                        if (rs.isLast() == true) {
                             out++;
-                        }
-                        else {
+                        } else {
                             rs.next();
                         }
                     }
@@ -75,16 +85,16 @@ public class Product extends Activity {
 
                     ProductAdapter adapter = new ProductAdapter(this, productsList);
                     recyclerView.setAdapter(adapter);
-                }
-                else {
+
+                } else {
                     z = "Invalid Query";
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             z = e.getMessage();
             Log.d("Sql Error", z);
         }
 
-    }
 
+    }
 }
