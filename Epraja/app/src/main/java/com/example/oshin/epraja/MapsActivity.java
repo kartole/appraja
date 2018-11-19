@@ -2,9 +2,11 @@ package com.example.oshin.epraja;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.PermissionGroupInfo;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -15,9 +17,19 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.util.Log;
+import android.view.Display;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.rtoshiro.util.format.SimpleMaskFormatter;
+import com.github.rtoshiro.util.format.text.MaskTextWatcher;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Response;
 import com.google.android.gms.location.LocationResult;
@@ -46,13 +58,18 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.google.android.gms.maps.SupportMapFragment;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 
 import javax.xml.parsers.ParserConfigurationException;
+
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -65,18 +82,137 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int LOCATION_REQUEST = 500;
     ArrayList<LatLng> listPoints;
     private static final String MY_API_KEY = "AIzaSyDVK6dbadK5nD9qs5edwmC3_LauatJ4TnU";
-
+    CircularProgressButton circularProgressButton;
+    Double distance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.rv_product_items_detailed);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         listPoints = new ArrayList<>();
 
+
+        getIncomingIntent();
+
+       /* final NestedScrollView scroll = findViewById(R.id.scrolling);
+        //final ScrollView scroll = (ScrollView) findViewById(R.id.scroll);
+        ImageView transparent = (ImageView)findViewById(R.id.imagetrans);
+
+        transparent.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Disallow ScrollView to intercept touch events.
+                        scroll.requestDisallowInterceptTouchEvent(true);
+                        // Disable touch on transparent view
+                        return false;
+
+                    case MotionEvent.ACTION_UP:
+                        // Allow ScrollView to intercept touch events.
+                        scroll.requestDisallowInterceptTouchEvent(false);
+                        return true;
+
+                    case MotionEvent.ACTION_MOVE:
+                        scroll.requestDisallowInterceptTouchEvent(true);
+                        return false;
+
+                    default:
+                        return true;
+                }
+            }
+        });*/
+
+        circularProgressButton = findViewById(R.id.btn_reserve);
+        circularProgressButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AsyncTask<String, String, String> getReserve = new AsyncTask<String, String, String>() {
+                    @Override
+                    protected String doInBackground(String... strings) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        return "reservado";
+                    }
+
+                    protected void onPostExecute(String s) {
+                        if (s.equals("reservado")) {
+                            Toast.makeText(getApplicationContext(), "Reservado com sucesso", Toast.LENGTH_SHORT).show();
+                            circularProgressButton.doneLoadingAnimation(Color.parseColor("#886A16"), BitmapFactory.decodeResource(getResources(), R.drawable.ic_done_white_48dp));
+                        }
+                    }
+
+                };
+                circularProgressButton.startAnimation();
+                getReserve.execute();
+            }
+        });
+
+
+    }
+
+
+    private void getIncomingIntent() {
+        if (getIntent().hasExtra("item_image") &&
+                getIntent().hasExtra("item_name") &&
+                getIntent().hasExtra("item_place") &&
+                getIntent().hasExtra("item_price") &&
+                getIntent().hasExtra("item_dist") &&
+                getIntent().hasExtra("item_cep") &&
+                getIntent().hasExtra("item_rua") &&
+                getIntent().hasExtra("item_num") &&
+                getIntent().hasExtra("item_bairro") &&
+                getIntent().hasExtra("item_cidade") &&
+                getIntent().hasExtra("item_uf")) {
+            int itemImg = getIntent().getIntExtra("item_image", 1);
+            String itemName = getIntent().getStringExtra("item_name");
+            String itemPlace = getIntent().getStringExtra("item_place");
+            String itemPrice = getIntent().getStringExtra("item_price");
+            String itemDist = getIntent().getStringExtra("item_dist");
+            String itemCep = getIntent().getStringExtra("item_cep");
+            String itemRua = getIntent().getStringExtra("item_rua");
+            String itemNum = getIntent().getStringExtra("item_num");
+            String itemBairro = getIntent().getStringExtra("item_bairro");
+            String itemCidade = getIntent().getStringExtra("item_cidade");
+            String itemUf = getIntent().getStringExtra("item_uf");
+
+            setItem(itemImg, itemName, itemPlace, itemPrice, itemDist, itemCep, itemRua, itemNum, itemBairro, itemCidade, itemUf);
+        }
+    }
+
+    private void setItem(int itemImg, String itemName, String itemPlace, String itemPrice, String itemDist,
+                         String itemCep, String itemRua, String itemNum, String itemBairro, String itemCidade, String itemUf) {
+
+        ImageView image = findViewById(R.id.item_image);
+        TextView name = findViewById(R.id.item_name);
+        TextView place = findViewById(R.id.item_place);
+        TextView price = findViewById(R.id.item_price);
+        //TextView dist = findViewById(R.id.item_distancia);
+        TextView endereco = findViewById(R.id.txtEndereco);
+        TextView bairro = findViewById(R.id.txtBairro);
+        TextView cidadeUf = findViewById(R.id.txtCidadeUF);
+
+
+        itemCep = itemCep.substring(0, 5) + "-" + itemCep.substring(5);
+        DecimalFormat df = new DecimalFormat("0.00##");
+        itemPrice = "R$ " + df.format(Double.parseDouble(itemPrice));
+
+        image.setImageResource(itemImg);
+        name.setText(itemName);
+        place.setText(itemPlace);
+        price.setText(itemPrice);
+        //dist.setText(itemDist);
+        endereco.setText(itemRua + ", " + itemNum + ", " + itemCep);
+        bairro.setText(itemBairro);
+        cidadeUf.setText(itemCidade + " - " + itemUf);
     }
 
 
@@ -104,6 +240,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         mMap.setMyLocationEnabled(true);
 
+        String itemRua = getIntent().getStringExtra("item_rua");
+        String itemNum = getIntent().getStringExtra("item_num");
+        String itemBairro = getIntent().getStringExtra("item_bairro");
+        String itemCidade = getIntent().getStringExtra("item_cidade");
+        String itemUf = getIntent().getStringExtra("item_uf");
 
         getDeviceLocation();
         getStoreLocation();
@@ -154,14 +295,49 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    private void getStoreLocation() {
+    public LatLng getStoreLocation(String itemRua, String itemNum, String itemBairro, String itemCidade, String itemUf) {
+
+        //String itemCep = getIntent().getStringExtra("item_cep");
+
+
+        Log.d(TAG, "getDeviceLocation: getting the devices current location");
+        //mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        Log.d(TAG, "onComplete: found location!");
+        List<Address> addressList = null;
+
+        String location = itemRua + ", " + itemNum + " - " + itemBairro + ", " + itemCidade + " - " + itemUf;
+        //String location = "Rua dos Goitacazes, 182 - Centro, Belo Horizonte - MG, 30190-050";
+        Geocoder geocoder = new Geocoder(MapsActivity.this);
+        try {
+            addressList = geocoder.getFromLocationName(location, 1);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Address address = addressList.get(0);
+        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+
+        return latLng;
+    }
+
+    public void getStoreLocation() {
+
+        //String itemCep = getIntent().getStringExtra("item_cep");
+        String itemRua = getIntent().getStringExtra("item_rua");
+        String itemNum = getIntent().getStringExtra("item_num");
+        String itemBairro = getIntent().getStringExtra("item_bairro");
+        String itemCidade = getIntent().getStringExtra("item_cidade");
+        String itemUf = getIntent().getStringExtra("item_uf");
+
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         try {
             Log.d(TAG, "onComplete: found location!");
             List<Address> addressList = null;
 
-            String location = "Rua dos Goitacazes, 182 - Centro, Belo Horizonte - MG, 30190-050";
+            String location = itemRua + ", " + itemNum + " - " + itemBairro + ", " + itemCidade + " - " + itemUf;
+            //String location = "Rua dos Goitacazes, 182 - Centro, Belo Horizonte - MG, 30190-050";
             Geocoder geocoder = new Geocoder(MapsActivity.this);
             try {
                 addressList = geocoder.getFromLocationName(location, 1);
@@ -186,8 +362,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
+
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -221,12 +399,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 });
             }
-        }catch(SecurityException e){
+        } catch (SecurityException e) {
             Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
-        }
-        finally {
+        } finally {
             final Task location = mFusedLocationProviderClient.getLastLocation();
-            if (location.isSuccessful()){
+            if (location.isSuccessful()) {
                 Location currentLocation = (Location) location.getResult();
                 LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 
@@ -244,6 +421,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //listPoints.add(latLng);
         if (listPoints.size() == 2) {
+            String[] latLong1 = listPoints.get(0).toString().split(",");
+            Double lat1 = Double.parseDouble(latLong1[0].replace("lat/lng: (","").trim());
+            Double lng1 = Double.parseDouble(latLong1[1].replace(")", "").trim());
+            String[] latLong2 = listPoints.get(1).toString().split(",");
+            Double lat2 = Double.parseDouble(latLong2[0].replace("lat/lng: (","").trim());
+            Double lng2 = Double.parseDouble(latLong2[1].replace(")", "").trim());
+            setDistance(distance(lat1, lng1, lat2, lng2));
+
+
+
             String url = getRequestUrl(listPoints.get(0), listPoints.get(1));
             TaskRequestDirections taskRequestDirections = new TaskRequestDirections();
             taskRequestDirections.execute(url);
@@ -252,6 +439,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 
+    private void setDistance (Double distance){
+        DecimalFormat df = new DecimalFormat("0.00#");
+        TextView dist = findViewById(R.id.item_distancia);
+
+        dist.setText(df.format(distance)+ " Km");
+    }
+
+    public double distance(double lat1, double lon1, double lat2, double lon2) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1))
+                * Math.sin(deg2rad(lat2))
+                + Math.cos(deg2rad(lat1))
+                * Math.cos(deg2rad(lat2))
+                * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        return (dist);
+    }
+
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
+    }
 
     private String getRequestUrl(LatLng origin, LatLng dest) {
         //Value of origin
@@ -383,9 +597,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             if (polylineOptions!=null) {
                 mMap.addPolyline(polylineOptions);
-                Intent intent = new Intent(MapsActivity.this, rv_product_items_detailed.class);
-                intent.putExtra("call_maps", "done");
-                startActivity(intent);
             } else {
                 Toast.makeText(getApplicationContext(), "Direction not found!", Toast.LENGTH_SHORT).show();
             }

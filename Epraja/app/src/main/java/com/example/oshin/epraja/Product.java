@@ -18,10 +18,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Product extends Activity {
 
@@ -43,7 +46,21 @@ public class Product extends Activity {
             if (con == null) {
                 z = "Cheque a conexão!";
             } else {
-                String query = "select A.IMG_NOME, A.NOME, B.NOME_LOJA AS LOJA, A.PRECO, '4,5KM' AS DISTANCIA FROM TB_T_PRODUTO A INNER JOIN TB_T_LOJA B ON A.ID_LOJA = B.ID_LOJA";
+                String query = "select A.IMG_NOME, " +
+                                    "A.NOME, " +
+                                    "B.NOME_LOJA AS LOJA, " +
+                                    "A.PRECO, " +
+                                    "'4,5KM' AS DISTANCIA, " +
+                                    "C.CEP, " +
+                                    "C.RUA, " +
+                                    "C.NUMERO, " +
+                                    "C.BAIRRO, " +
+                                    "C.CIDADE, " +
+                                    "C.UF " +
+                                "FROM TB_T_PRODUTO A " +
+                                "INNER JOIN TB_T_LOJA B ON A.ID_LOJA = B.ID_LOJA " +
+                                "INNER JOIN TB_R_ENDERECO C ON B.ID_ENDERECO = C.ID_ENDERECO"
+                        ;
                 Statement statement = con.createStatement();
                 ResultSet rs = statement.executeQuery(query);
                 if (rs.next()) {
@@ -56,11 +73,18 @@ public class Product extends Activity {
                     while (out < 1) {
                         drawableID = getResources().getIdentifier(rs.getString("IMG_NOME"), "drawable", getPackageName());
 
+
                         productsList.add(new ModelProduct(drawableID,
                                 rs.getString("NOME"),
                                 rs.getString("LOJA"),
                                 rs.getString("PRECO"),
-                                rs.getString("DISTANCIA"))
+                                rs.getString("DISTANCIA"),
+                                rs.getString("CEP"),
+                                rs.getString("RUA"),
+                                rs.getString("NUMERO"),
+                                rs.getString("BAIRRO"),
+                                rs.getString("CIDADE"),
+                                rs.getString("UF"))
                         );
 
                         if (rs.isLast() == true) {

@@ -26,6 +26,7 @@ import android.annotation.SuppressLint;
 import android.os.StrictMode;
 import android.util.Log;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.sql.Connection;
 
@@ -40,6 +41,11 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
+        Intent intent = new Intent(MainActivity.this, MapDeviceLocation.class);
+        startActivity(intent);
+
+        //Intent intent = new Intent(this, MapDeviceLocation.class);
+        //startActivity(intent);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -63,7 +69,8 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
+        MapDeviceLocation mapDeviceLocation = new MapDeviceLocation();
+        //Toast.makeText(getApplicationContext(), mapDeviceLocation.getLatLng().toString(), Toast.LENGTH_SHORT).show();
        // doInBackground();
     }
 
@@ -149,6 +156,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void btnProcurar_OnClick(View v){
+
         Intent myIntent = new Intent(MainActivity.this, Product.class);
         startActivity(myIntent);
     }
