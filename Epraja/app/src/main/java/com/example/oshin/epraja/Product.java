@@ -1,30 +1,15 @@
 package com.example.oshin.epraja;
 
-import android.app.ActivityOptions;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.Pair;
-import android.view.Display;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.maps.GoogleMap;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class Product extends Activity {
 
@@ -118,7 +103,6 @@ public class Product extends Activity {
             z = e.getMessage();
             Log.d("Sql Error", z);
         }
-
 
     }
 }

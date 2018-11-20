@@ -1,48 +1,41 @@
 package com.example.oshin.epraja;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.IpSecManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import android.annotation.SuppressLint;
-import android.os.StrictMode;
-import android.util.Log;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
+import android.view.View;
 
 import java.sql.Connection;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+        progressDialog = ProgressDialog.show(this, "Please wait.",
+                "Finding direction..!", true);
+
 
         Intent intent = new Intent(MainActivity.this, MapDeviceLocation.class);
         startActivity(intent);
+        //MapDeviceLocation mapDeviceLocation = new MapDeviceLocation();
+        progressDialog.dismiss();
 
         //Intent intent = new Intent(this, MapDeviceLocation.class);
         //startActivity(intent);
@@ -69,9 +62,9 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        MapDeviceLocation mapDeviceLocation = new MapDeviceLocation();
+        //MapDeviceLocation mapDeviceLocation = new MapDeviceLocation();
         //Toast.makeText(getApplicationContext(), mapDeviceLocation.getLatLng().toString(), Toast.LENGTH_SHORT).show();
-       // doInBackground();
+        //doInBackground();
     }
 
 

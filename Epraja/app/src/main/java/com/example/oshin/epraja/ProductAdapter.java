@@ -1,31 +1,22 @@
 package com.example.oshin.epraja;
 
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.app.Activity;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Map;
+
+import modules.Route;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder>{
 
@@ -78,15 +69,21 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         String[] latLong2 = storeLatLng.toString().split(",");
         Double lat2 = Double.parseDouble(latLong2[0].replace("lat/lng: (","").trim());
         Double lng2 = Double.parseDouble(latLong2[1].replace(")", "").trim());
-        Double dist = mapsActivity.distance(lat1, lng1, lat2, lng2);
+
+        mapsActivity.startSendRequest(deviceLatLng, storeLatLng);
+
+        //Double dist = mapsActivity.distance(lat1, lng1, lat2, lng2);//mapsActivity.distanceRoute;//mapsActivity.distance(lat1, lng1, lat2, lng2);
+
+        Route route = new Route();
+        distancia.setText(route.distance.text);
+
 
         DecimalFormat df = new DecimalFormat("0.00#");
-        String distFormated = df.format(dist)+ " Km";
+        //String distFormated = df.format(dist)+ " Km";
 
-        distancia.setText(distFormated);
+        //distancia.setText(distFormated);
 
         String priceFormated = "R$ " + df.format(Double.parseDouble(productItem.getPrice()));
-
 
         image.setImageResource(productItem.getImage());
         name.setText(productItem.getName());
