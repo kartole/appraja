@@ -50,16 +50,8 @@ public class Login extends AppCompatActivity {
          user = findViewById(R.id.ed_username);
          password = findViewById(R.id.ed_password);
 
-        Bundle b = getIntent().getExtras();
+         handler.postDelayed(runnable, 2000);
 
-
-        if (b == null) {
-            handler.postDelayed(runnable, 2000);
-        }
-        else {
-            handler.postDelayed(runnable, 0);
-            getIntent().removeExtra("backRegister");
-        }
 
         circularProgressButton = (CircularProgressButton)findViewById(R.id.btnLogin);
 

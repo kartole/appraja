@@ -200,8 +200,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     //@Override
     public void onDirectionFinderStart() {
-        progressDialog = ProgressDialog.show(this, "Please wait.",
-                "Finding direction..!", true);
+        progressDialog = ProgressDialog.show(this, "Aguarde.",
+                "Montando rota..!", true);
 
         if (originMarkers != null) {
             for (Marker marker : originMarkers) {
@@ -237,18 +237,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             //distanceRoute = Double.parseDouble(route.distance.text);
             ((TextView) findViewById(R.id.item_distancia)).setText(route.distance.text);
-
+            ((TextView) findViewById(R.id.txt_tempo)).setText(route.duration.text);
             //((TextView) findViewById(R.id.tvDuration)).setText(route.duration.text);
-            //((TextView) findViewById(R.id.tvDistance)).setText(route.distance.text);
+
 
             originMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
-                    .title(route.startAddress)
-                    .position(route.startLocation)));
-            destinationMarkers.add(mMap.addMarker(new MarkerOptions()
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                     .title(route.endAddress)
                     .position(route.endLocation)));
+            destinationMarkers.add(mMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                    .title(route.startAddress)
+                    .position(route.startLocation)));
 
             PolylineOptions polylineOptions = new PolylineOptions().
                     geodesic(true).
@@ -307,7 +307,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         try {
-            new DirectionFinder(this, origin, destination).execute();
+            new DirectionFinder(this, destination, origin).execute();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

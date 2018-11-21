@@ -117,7 +117,7 @@ public class Register extends AppCompatActivity {
         launchNextActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         Bundle b = new Bundle();
         b.putInt("key", 1);
-        launchNextActivity.putExtra("backRegister", 1);
+        //launchNextActivity.putExtra("backRegister", 1);
         startActivity(launchNextActivity);
 
            Toast.makeText(getBaseContext(), "Registrado com sucesso!", Toast.LENGTH_SHORT).show();

@@ -30,12 +30,13 @@ public class Product extends Activity {
 
     @Override
     public void onBackPressed() {
+
         Intent setIntent = new Intent(this, MainActivity.class);
         setIntent.addCategory(Intent.CATEGORY_HOME);
-        setIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         setIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         setIntent.putExtra("backPressed", 1);
         startActivity(setIntent);
+        finish();
     }
 
     //aqui
