@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,8 +36,13 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +50,11 @@ import java.util.List;
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import modules.DirectionFinder;
 import modules.Route;
+
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.util.EntityUtils;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -63,6 +75,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private List<Marker> originMarkers = new ArrayList<>();
     private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
+    private List<LatLng> list;
+    private Polyline polyline;
+    private long distance;
 
 
     @Override
@@ -181,6 +196,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
+
+
     //@Override
     public void onDirectionFinderStart() {
         progressDialog = ProgressDialog.show(this, "Please wait.",
@@ -277,6 +294,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         String origin = addressO.toString();
         String destination = addressD.toString();
+
+
+
         if (origin.isEmpty()) {
             Toast.makeText(this, "Please enter origin address!", Toast.LENGTH_SHORT).show();
             return;
@@ -325,6 +345,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         String origin = addressO.toString();
         String destination = addressD.toString();
+
+
         if (origin.isEmpty()) {
             Toast.makeText(this, "Please enter origin address!", Toast.LENGTH_SHORT).show();
             return;
@@ -547,9 +569,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             String url = getRequestUrl(listPoints.get(0), listPoints.get(1));
             TaskRequestDirections taskRequestDirections = new TaskRequestDirections();
             taskRequestDirections.execute(url);
-        }
+        }*/
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));*/
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 /*
     private void setDistance (Double distance){
@@ -579,6 +601,193 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private double rad2deg(double rad) {
         return (rad * 180.0 / Math.PI);
     }
+
+
+
+    public void drawRoute(){
+        PolylineOptions po;
+
+
+        if(polyline == null){
+            po = new PolylineOptions();
+
+            for(int i = 0, tam = list.size(); i < tam; i++){
+                po.add(list.get(i));
+            }
+
+            po.color(Color.BLACK).width(4);
+            polyline = mMap.addPolyline(po);
+        }
+        else{
+            polyline.setPoints(list);
+        }
+    }
+
+    public static double distance(LatLng StartP, LatLng EndP) {
+        double lat1 = StartP.latitude;
+        double lat2 = EndP.latitude;
+        double lon1 = StartP.longitude;
+        double lon2 = EndP.longitude;
+        double dLat = Math.toRadians(lat2-lat1);
+        double dLon = Math.toRadians(lon2-lon1);
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon/2) * Math.sin(dLon/2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        return 6366000 * c;
+    }
+
+
+    public void getLocation(View view){
+        Geocoder gc = new Geocoder(MapsActivity.this);
+
+        List<Address> addressList;
+        try {
+            //addressList = gc.getFromLocation(list.get(list.size() - 1).latitude, list.get(list.size() - 1).longitude, 1);
+            addressList = gc.getFromLocationName("Rua dos Guajajaras 329, Belo Horizonte, Minas Gerais, Brasil", 1);
+
+            String address = "Rua: "+addressList.get(0).getThoroughfare()+"\n";
+            address += "Cidade: "+addressList.get(0).getSubAdminArea()+"\n";
+            address += "Estado: "+addressList.get(0).getAdminArea()+"\n";
+            address += "País: "+addressList.get(0).getCountryName();
+
+            LatLng ll = new LatLng(addressList.get(0).getLatitude(), addressList.get(0).getLongitude());
+
+            //Toast.makeText(MainActivity.this, "Local: "+address, Toast.LENGTH_LONG).show();
+            Toast.makeText(MapsActivity.this, "LatLng: "+ll, Toast.LENGTH_LONG).show();
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+
+
+    /* ***************************************** ROTA ***************************************** */
+
+    public void getRouteByGMAV2(String etO, String etD, Double latO, Double lngO, Double latD, Double lngD) throws UnsupportedEncodingException {
+        //EditText etO = (EditText) findViewById(R.id.origin);
+        //EditText etD = (EditText) findViewById(R.id.destination);
+
+
+        String origin = URLEncoder.encode(etO, "UTF-8");
+        String destination = URLEncoder.encode(etD, "UTF-8");
+
+        getRoute(new LatLng(latO, lngO), new LatLng(latD, lngD));
+    }
+
+
+
+
+    // WEB CONNECTION
+    //public void getRoute(final String origin, final String destination){
+    public void getRoute(final LatLng origin, final LatLng destination){
+        new Thread(){
+            public void run(){
+						/*String url= "http://maps.googleapis.com/maps/api/directions/json?origin="
+								+ origin+"&destination="
+								+ destination+"&sensor=false";*/
+                String url= "https://maps.googleapis.com/maps/api/directions/json?origin="
+                        + origin.latitude+","+origin.longitude+"&destination="
+                        + destination.latitude+","+destination.longitude+"&sensor=false"
+                        +"&key="+MY_API_KEY;
+
+
+                HttpResponse response;
+                HttpGet request;
+                AndroidHttpClient client = AndroidHttpClient.newInstance("route");
+
+                request = new HttpGet(url);
+                try {
+                    response = client.execute(request);
+                    final String answer = EntityUtils.toString(response.getEntity());
+
+                    runOnUiThread(new Runnable(){
+                        public void run(){
+                            try {
+                                //Log.i("Script", answer);
+                                list = buildJSONRoute(answer);
+                                drawRoute();
+                            }
+                            catch(JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                }
+                catch(IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
+
+
+
+    // PARSER JSON
+    public List<LatLng> buildJSONRoute(String json) throws JSONException {
+        JSONObject result = new JSONObject(json);
+        JSONArray routes = result.getJSONArray("routes");
+
+        distance = routes.getJSONObject(0).getJSONArray("legs").getJSONObject(0).getJSONObject("distance").getInt("value");
+
+        JSONArray steps = routes.getJSONObject(0).getJSONArray("legs").getJSONObject(0).getJSONArray("steps");
+        List<LatLng> lines = new ArrayList<LatLng>();
+
+        for(int i=0; i < steps.length(); i++) {
+            Log.i("Script", "STEP: LAT: "+steps.getJSONObject(i).getJSONObject("start_location").getDouble("lat")+" | LNG: "+steps.getJSONObject(i).getJSONObject("start_location").getDouble("lng"));
+
+
+            String polyline = steps.getJSONObject(i).getJSONObject("polyline").getString("points");
+
+            for(LatLng p : decodePolyline(polyline)) {
+                lines.add(p);
+            }
+
+            Log.i("Script", "STEP: LAT: "+steps.getJSONObject(i).getJSONObject("end_location").getDouble("lat")+" | LNG: "+steps.getJSONObject(i).getJSONObject("end_location").getDouble("lng"));
+        }
+
+        return(lines);
+    }
+
+
+
+
+    // DECODE POLYLINE
+    private List<LatLng> decodePolyline(String encoded) {
+
+        List<LatLng> listPoints = new ArrayList<LatLng>();
+        int index = 0, len = encoded.length();
+        int lat = 0, lng = 0;
+
+        while (index < len) {
+            int b, shift = 0, result = 0;
+            do {
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lat += dlat;
+
+            shift = 0;
+            result = 0;
+            do {
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lng += dlng;
+
+            LatLng p = new LatLng((((double) lat / 1E5)), (((double) lng / 1E5)));
+            Log.i("Script", "POL: LAT: "+p.latitude+" | LNG: "+p.longitude);
+            listPoints.add(p);
+        }
+        return listPoints;
+    }
+
 
 /*
     private String getRequestUrl(LatLng origin, LatLng dest) {

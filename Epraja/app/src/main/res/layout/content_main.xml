@@ -8,17 +8,34 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/app_bar_main">
 
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:visibility="gone"
+        >
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/mapDeviceLocation"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        tools:context=".MapsActivity"/>
+        tools:context=".MapDeviceLocation" />
     </LinearLayout>
+
+    <io.netopen.hotbitmapgg.library.view.RingProgressBar
+        android:id="@+id/progrss1"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        app:ringColor="@color/colorWhite"
+        app:ringProgressColor="@color/colorPrimaryDark"
+        app:textColor="@color/colorPrimaryDark"
+        app:textSize="20sp"
+        app:max="100"/>
 
     <Button
         android:id="@+id/button"
@@ -28,13 +45,9 @@
         android:layout_marginTop="300dp"
         android:layout_marginEnd="100dp"
         android:layout_marginBottom="80dp"
-        android:onClick="btnProcurar_OnClick"
-        android:text="PROCURAR"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.532"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.747" />
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/btn_bg_page"
+        android:text="PROCURAR" />
 
+</RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -54,10 +54,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         name = viewHolder.item_name;
         place = viewHolder.item_place;
         price = viewHolder.item_price;
-        distancia = viewHolder.item_distancia;
+        //distancia = viewHolder.item_distancia;
 
 
-        MapsActivity mapsActivity = new MapsActivity();
+        /*MapsActivity mapsActivity = new MapsActivity();
 
 
         LatLng deviceLatLng = MapDeviceLocation.latLng;
@@ -70,12 +70,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         Double lat2 = Double.parseDouble(latLong2[0].replace("lat/lng: (","").trim());
         Double lng2 = Double.parseDouble(latLong2[1].replace(")", "").trim());
 
-        mapsActivity.startSendRequest(deviceLatLng, storeLatLng);
+        mapsActivity.startSendRequest(deviceLatLng, storeLatLng);*/
 
         //Double dist = mapsActivity.distance(lat1, lng1, lat2, lng2);//mapsActivity.distanceRoute;//mapsActivity.distance(lat1, lng1, lat2, lng2);
 
-        Route route = new Route();
-        distancia.setText(route.distance.text);
+        //Route route = new Route();
+        //distancia.setText(route.distance.text);
 
 
         DecimalFormat df = new DecimalFormat("0.00#");

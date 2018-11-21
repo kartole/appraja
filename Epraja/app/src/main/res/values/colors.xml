@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FFDA33</color>
+    <color name="colorPrimary">#886A16</color>
     <color name="colorPrimaryDark">#886A16</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorWhite">#FFFFFF</color>
@@ -10,6 +10,6 @@
     <color name="gradStart">#FFC300</color>
     <color name="gradStop">#DCC045</color>
 
-
+<!--#FFDA33-->
 
 </resources>

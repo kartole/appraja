@@ -30,8 +30,6 @@
             app:expandedTitleTextAppearance="@android:color/transparent"
             app:layout_scrollFlags="scroll">
 
-
-
             <ImageButton
                 android:background="@android:color/white"
                 android:layout_width="match_parent"

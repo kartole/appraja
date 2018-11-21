@@ -73,6 +73,7 @@ public class Login extends AppCompatActivity {
                             //circularProgressButton.doneLoadingAnimation(Color.parseColor("#333639"), BitmapFactory.decodeResource(getResources(), R.drawable.ic_done_white_48dp));
                             //Intent intent = new Intent(Login.this, MainActivity.class);
                             //startActivity(intent);
+
                             launchNextActivity = new Intent(Login.this, MainActivity.class);
                             launchNextActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             launchNextActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

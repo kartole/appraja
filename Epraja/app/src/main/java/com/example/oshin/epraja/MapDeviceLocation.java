@@ -1,6 +1,8 @@
 package com.example.oshin.epraja;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Location;
@@ -9,6 +11,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -40,21 +45,34 @@ public class MapDeviceLocation extends FragmentActivity implements OnMapReadyCal
     CircularProgressButton circularProgressButton;
     Double distance;
     public static LatLng latLng;
+    public static Context mContext;
+    public static Activity mActivity;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+   /* @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        //setContentView(R.layout.activity_main);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        listPoints = new ArrayList<>();
+
 
         //finish();
         //getIncomingIntent();
 
     }
+*/
+
+   public void init(SupportMapFragment mapFragment, Context context, Activity activity){
+
+
+       /*SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+               .findFragmentById(R.id.mapDeviceLocation);*/
+       mActivity = activity;
+       mContext = context;
+       if (mapFragment != null) {
+           mapFragment.getMapAsync(this);
+       }
+       listPoints = new ArrayList<>();
+   }
 
     /*public void init(){
 
@@ -80,11 +98,12 @@ public class MapDeviceLocation extends FragmentActivity implements OnMapReadyCal
 
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST);
             return;
         }
+
         mMap.setMyLocationEnabled(true);
 
 
@@ -95,10 +114,10 @@ public class MapDeviceLocation extends FragmentActivity implements OnMapReadyCal
     }
 
     private void getDeviceLocation() {
-        Log.d(TAG, "getDeviceLocation: getting the devices current location");
+        //Log.d(TAG, "getDeviceLocation: getting the devices current location");
 
 
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mActivity);
 
         try {
 

@@ -7,6 +7,7 @@
     tools:context=".ProductItens"
     >
 
+
     <LinearLayout
         android:id="@+id/parentLayout"
         android:layout_width="match_parent"
@@ -39,7 +40,9 @@
                 android:text="Camiseta Nike"
                 android:transitionName="nameTransition"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:ellipsize="end"
+                android:maxLines="1"/>
 
             <TextView
                 android:id="@+id/item_place"
@@ -68,6 +71,7 @@
     </LinearLayout>
 
     <TextView
+        android:visibility="invisible"
         android:id="@+id/item_distancia"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -78,3 +82,4 @@
 
 
 </android.support.v7.widget.CardView>
+
