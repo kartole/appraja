@@ -23,7 +23,7 @@ public class RegisterDAO{
         Connection con = connect.connectionDB();
 
         String query =  "INSERT INTO TB_T_USER(USER_NAME, CPF, EMAIL, USER_PASSWORD, ATIVO) "
-                +"VALUES('"+ user +"','"+ cpf +"','"+ email +"','"+ password +"',1)";
+                +"VALUES('"+ user +"', REPLACE(REPLACE('"+ cpf +"','.', ''), '-', ''),'"+ email +"','"+ password +"',1)";
 
 
         try{

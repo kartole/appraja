@@ -2,8 +2,8 @@
     <string name="app_name">Epraja</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Washington Elvira Filho</string>
-    <string name="nav_header_subtitle">washin.elvira@gmail.com</string>
+    <string name="nav_header_title">Appraja</string>
+    <string name="nav_header_subtitle">contato@appraja.com.br</string>
     <string name="nav_header_desc">Menu Appraja</string>
     <string name="action_settings">Configurações</string>
     <string name="title_activity_find_product">FindProduct</string>

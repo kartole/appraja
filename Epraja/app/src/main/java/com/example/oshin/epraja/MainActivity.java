@@ -56,7 +56,19 @@ public class MainActivity extends AppCompatActivity
         navigationView = (NavigationView)findViewById(R.id.nav_view);
 
         navigationView.setNavigationItemSelectedListener(this);*/
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View hView =  navigationView.getHeaderView(0);
+        TextView nav_user = (TextView)hView.findViewById(R.id.nome_usuario);
+        TextView nav_mail = (TextView)hView.findViewById(R.id.email_usuario);
 
+
+        //nav_user.setText("Washington Elvira Filho");
+        //nav_mail.setText("washin.elvira@gmail.com");
+
+
+
+        nav_user.setText(UsuarioDAO.userName);
+        nav_mail.setText(UsuarioDAO.userMail);
 
 
         btnRegistrar = findViewById(R.id.button);
@@ -110,6 +122,7 @@ public class MainActivity extends AppCompatActivity
                             Intent myIntent = new Intent(MainActivity.this, Product.class);
                             myIntent.putExtra("back", 1);
                             startActivity(myIntent);
+                            finish();
                             //ringProgress();
                             //circularProgressButton.doneLoadingAnimation(Color.parseColor("#333639"), BitmapFactory.decodeResource(getResources(), R.drawable.ic_done_white_48dp));
                             //Intent intent = new Intent(Login.this, MainActivity.class);
@@ -149,7 +162,7 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        //navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
 
@@ -243,7 +256,7 @@ myHandler = new Handler(new Handler.Callback() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                for (int i=0; i<100; i++){
+                for (int i=0; i<94; i++){
                     try {
                         Thread.sleep(100);
                         myHandler.sendEmptyMessage(0);
